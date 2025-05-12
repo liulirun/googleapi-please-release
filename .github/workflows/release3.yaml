@@ -3,8 +3,8 @@
 name: release3
 on:
   push:
-    branches:
-      - main
+    # branches:
+    #   - main
 
 # permissions:
 #   contents: write
@@ -19,8 +19,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Application Version
-        id: version
+      - name: Semantic Version
+        id: sver
         uses: paulhatch/semantic-version@v5.4.0
         with: 
           major_pattern: "major"
@@ -30,7 +30,26 @@ jobs:
               
       - name: Use results
         run: |
-          echo "version is ${{ steps.version.outputs.version }}"
-          echo "version_tag is ${{ steps.version.outputs.version_tag }}"
-          echo "is_tagged is ${{ steps.version.outputs.is_tagged }}"
-          echo "previous_version is ${{ steps.version.outputs.previous_version }}"
+          echo "version is ${{ steps.sver.outputs.version }}"
+          echo "version_tag is ${{ steps.sver.outputs.version_tag }}"
+          echo "previous_version is ${{ steps.sver.outputs.previous_version }}"
+      
+      - name: Create Release
+        id: create_release
+        uses: comnoco/create-a-release@v2.0.5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          TAG: ${{ steps.sver.outputs.version_tag }}
+        with:
+          tag_name: ${{ env.tag }}
+          release_name: Release ${{ env.tag }}
+          draft: false
+          prerelease: false
+
+      # - name: Update PR
+      #   uses: actions/github-script@v7
+
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       const fs = require("fs");
