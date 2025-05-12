@@ -1,15 +1,21 @@
 # https://github.com/PaulHatch/semantic-version/blob/master/readme.md
-on:
-  push:
-    branches:
-      - init
-      - main
-
-permissions:
-  contents: write
-  pull-requests: write
 
 name: release3
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      [closed]
+
+  # push:
+  #   branches:
+  #     - init
+  #     - main
+
+# permissions:
+#   contents: write
+#   pull-requests: write
 
 jobs:
   release-please:
