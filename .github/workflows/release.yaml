@@ -21,6 +21,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Deal with next version
         run: |
-          echo "$OUTPUTS"
-          echo ${{ steps.next-release.outputs.new_tag }}
-          echo ${{ steps.next-release.outputs.previous_tag }}
+          echo "new_tag: ${{ steps.next-release.outputs.new_tag }}"
+          echo "new_version: ${{ steps.next-release.outputs.new_version }}"
+          echo "previous_tag: ${{ steps.next-release.outputs.previous_tag }}"
