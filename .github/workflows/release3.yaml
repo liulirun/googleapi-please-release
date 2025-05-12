@@ -1,4 +1,4 @@
-# https://github.com/marketplace/actions/git-semantic-version
+# https://github.com/PaulHatch/semantic-version/blob/master/readme.md
 on:
   push:
     branches:
@@ -27,6 +27,7 @@ jobs:
           major_pattern: "major"
           minor_pattern: "minor"
           version_format: "${major}.${minor}.${patch}"
+          tag_prefix: "v"
               
       - name: Use results
         run: |
