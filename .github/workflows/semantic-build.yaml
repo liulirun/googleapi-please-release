@@ -1,16 +1,10 @@
 name: semantic-build
 
-# trigger: merge a PR against main
-# on:
-#   push:
-#     branches:
-#       - main
-
 on:
   workflow_call:
 
-permissions:
-  contents: write
+# permissions:
+#   contents: write
 
 jobs:
   release-please:
