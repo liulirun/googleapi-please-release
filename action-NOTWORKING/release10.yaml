@@ -1,5 +1,5 @@
-# not working with some keywords like refactor:
-# https://github.com/marketplace/actions/github-tag-with-semantic-versioning
+
+# https://github.com/marketplace/actions/semver-release-huggingface
 on:
   push:
     branches:
