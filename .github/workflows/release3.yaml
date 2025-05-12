@@ -23,6 +23,10 @@ jobs:
       - name: Application Version
         id: version
         uses: paulhatch/semantic-version@v5.4.0
+        with: 
+          major_pattern: "major"
+          minor_pattern: "minor"
+          version_format: "${major}.${minor}.${patch}"
               
       - name: Use results
         run: |
