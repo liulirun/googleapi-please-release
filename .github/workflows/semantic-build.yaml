@@ -1,0 +1,52 @@
+name: semantic-build
+
+# trigger: merge a PR against main
+# on:
+#   push:
+#     branches:
+#       - main
+
+on:
+  workflow_call:
+
+permissions:
+  contents: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      # https://github.com/PaulHatch/semantic-version
+      - name: Semantic Version
+        id: sver
+        uses: paulhatch/semantic-version@v5.4.0
+        with:
+          major_pattern: "major"
+          minor_pattern: "minor"
+          version_format: "${major}.${minor}.${patch}"
+          tag_prefix: "v"
+      
+      # fake build step here
+      - name: Use results
+        run: |
+          echo "version is ${{ steps.sver.outputs.version }}"
+          echo "version_tag is ${{ steps.sver.outputs.version_tag }}"
+          echo "previous_version is ${{ steps.sver.outputs.previous_version }}"
+
+      # https://github.com/ncipollo/release-action
+      - name: Create Release
+        id: create_release
+        uses:  ncipollo/release-action@v1.16.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXT_RELEASE: ${{ steps.sver.outputs.version_tag }}
+        with:
+          tag: ${{ env.NEXT_RELEASE }}
+          name: ${{ env.NEXT_RELEASE }}
+          draft: false
+          prerelease: false
