@@ -43,7 +43,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
           TAG: ${{ steps.sver.outputs.version_tag }}
         with:
-          name: ${{ env.tag }}
+          tag: ${{ env.TAG }}
+          name: ${{ env.TAG }}
           draft: false
           prerelease: false
 
