@@ -18,5 +18,3 @@ jobs:
       - name: Application Version
         id: version
         uses: paulhatch/semantic-version@v5.4.0
-        with:
-          change_path: "src/service"
