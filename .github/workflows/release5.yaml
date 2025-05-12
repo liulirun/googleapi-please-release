@@ -1,0 +1,35 @@
+#https://github.com/GitTools/actions/blob/main/docs/examples/github/gitversion/command.md
+
+on:
+  push:
+    branches:
+      - init
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: release4
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v3.2.1
+        with:
+          versionSpec: '6.0.0'
+
+      - name: Output the FullSemVer variable
+        uses: gittools/actions/gitversion/command@v3.2.1
+        with:
+          arguments: '/showvariable FullSemVer'
+
+      - name: Output the formatted version
+        uses: gittools/actions/gitversion/command@v3.2.1
+        with:
+          arguments: '/format {Major}.{Minor}' # any Output Variable can be used here          
