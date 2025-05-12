@@ -26,11 +26,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           bump-tag: 'true'          # Bump tag to Git repository
+          prefix: 'v'               # Set a prefix to your tag
           # file-update: 'true'       # Updates file with new semver and add change to last commit
           # file-path: 'package.json' # Path to the file to update
           # major: 'BREAKING CHANGE'  # Keyword for MAJOR
           # minor: 'feature'          # Keyword for MINOR
-          # prefix: 'v'               # Set a prefix to your tag
           # enable-snapshot: 'true'   # Generate as SNAPSHOT instead of RELEASE
           # snapshot-suffix: 'beta'   # Suffix for SNAPSHOT versioning (e.g. 1.0.1-beta.1)
 
