@@ -15,6 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Bump version and push tag
+        id: next-release
         uses: hennejg/github-tag-action@v4.3.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deal with next version
+        run: |
+          echo "$OUTPUTS"
+          echo ${{ steps.next-release.outputs.new_tag }}
+          echo ${{ steps.next-release.outputs.previous_tag }}
