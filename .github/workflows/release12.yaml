@@ -1,38 +1,61 @@
+# not working on some keywords
 # https://github.com/marketplace/actions/autobashed-semantic-versioning-semver-for-release-and-snapshot
 on:
   push:
     branches:
       - init
       - main
+env:
+  GH_TOKEN: ${{ github.token }}
 
 permissions:
   contents: write
   pull-requests: write
 
-name: release12
-
+name: release13
 jobs:
-  generate:
-    runs-on: ubuntu-latest
+  release13:
+    name: Release
+    permissions: write-all
+    runs-on: [ubuntu-latest]
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - name: "Generate Next SemVer"
-        id: version
-        uses: bencatlab/autobashed-semver@v2.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          bump-tag: 'true'          # Bump tag to Git repository
-          prefix: 'v'               # Set a prefix to your tag
-          # file-update: 'true'       # Updates file with new semver and add change to last commit
-          # file-path: 'package.json' # Path to the file to update
-          # major: 'BREAKING CHANGE'  # Keyword for MAJOR
-          # minor: 'feature'          # Keyword for MINOR
-          # enable-snapshot: 'true'   # Generate as SNAPSHOT instead of RELEASE
-          # snapshot-suffix: 'beta'   # Suffix for SNAPSHOT versioning (e.g. 1.0.1-beta.1)
+      - id: get-version
+        name: Get Version
+        run: |
+          echo 'json<<EOF' >>"${GITHUB_OUTPUT}"
+          ./sver json "$(./sver version)" | \
+            tee -a "$GITHUB_OUTPUT" | \
+            jq -C
+          echo EOF >>"${GITHUB_OUTPUT}"
 
-      - name: "Output SemVer from previous Step"
-        run: echo "${{ steps.version.outputs.semver }}"
+      - id: is-existing-release
+        name: Checking if Release Exists
+        run: |
+          if [ -n "$(
+            gh release list \
+              --json tagName \
+              --jq '.[] | .tagName' | \
+              ./sver filter '${{ fromJSON(steps.get-version.outputs.json).version }}'
+            )" ] ; then
+            echo exists=true >> "$GITHUB_OUTPUT"
+          else
+            echo exists=false >> "$GITHUB_OUTPUT"
+          fi 
+
+      - env:
+          MAJOR: ${{ fromJSON(steps.get-version.outputs.json).major }} 
+          MINOR: ${{ fromJSON(steps.get-version.outputs.json).minor }} 
+          VERSION: v${{ fromJSON(steps.get-version.outputs.json).version }} 
+        if: steps.is-existing-release.outputs.exists == 'false'
+        name: Create New Release
+        run: |
+          gh release \
+            create "$VERSION" \
+            --generate-notes \
+            --latest \
+            sver
+          git tag -f "v${MAJOR}"
+          git tag -f "v${MAJOR}.${MINOR}"
+          git push -f --tags
