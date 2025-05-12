@@ -7,11 +7,9 @@ on:
       - main
     types:
       [closed]
-
-  # push:
-  #   branches:
-  #     - init
-  #     - main
+  push:
+    branches:
+      - main
 
 # permissions:
 #   contents: write
