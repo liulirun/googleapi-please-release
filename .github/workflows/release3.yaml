@@ -1,0 +1,32 @@
+# https://github.com/marketplace/actions/git-semantic-version
+on:
+  push:
+    branches:
+      - init
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: release3
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Application Version
+        id: version
+        uses: paulhatch/semantic-version@v5.4.0
+              
+      - name: Use results
+        run: |
+          echo "version is ${{ steps.version.outputs.version }}"
+          echo "version_tag is ${{ steps.version.outputs.version_tag }}"
+          echo "is_tagged is ${{ steps.version.outputs.is_tagged }}"
+          echo "previous_version is ${{ steps.version.outputs.previous_version }}"
