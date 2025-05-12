@@ -13,7 +13,7 @@ permissions:
 name: release5
 
 jobs:
-  release-please:
+  release5:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
