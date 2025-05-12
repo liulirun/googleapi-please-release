@@ -1,0 +1,35 @@
+# https://github.com/marketplace/actions/git-automatic-semantic-versioning
+on:
+  push:
+    branches:
+      - init
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: release11
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - name: calculate version
+        id: calculate-version
+        uses: bitshifted/git-auto-semver@v2
+      - name: Use version
+        run: 'echo "Calculated version: ${{ steps.calculate-version.outputs.version-string }}"'
