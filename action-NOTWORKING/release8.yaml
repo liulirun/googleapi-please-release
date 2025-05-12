@@ -1,3 +1,5 @@
+# not working with some keywords like refactor:
+# https://github.com/marketplace/actions/github-tag-with-semantic-versioning
 on:
   push:
     branches:

@@ -1,0 +1,31 @@
+# not working with some keywords like refactor:
+# https://github.com/marketplace/actions/github-tag-with-semantic-versioning
+on:
+  push:
+    branches:
+      - init
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+name: release10
+jobs:
+  release10:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: semantic-release
+        id: get_next_version
+        uses: ahmadnassri/action-semantic-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Show the next version
+        run: |
+          echo ${{ steps.get_next_version.outputs.last-release-version }}
+          echo ${{ steps.get_next_version.outputs.release-git-tag }}
+          echo ${{ steps.get_next_version.outputs.release-release-version }}
