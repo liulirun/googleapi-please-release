@@ -21,9 +21,16 @@ jobs:
           fetch-depth: 0
 
       - uses: codfish/semantic-release-action@v3
+        id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - run: echo ${{ steps.semantic.outputs.release-version }}
 
+      - run: echo "$OUTPUTS"
+        env:
+          OUTPUTS: ${{ toJson(steps.semantic.outputs) }}
+          
       - run: |
           echo $RELEASE_VERSION
           echo $RELEASE_MAJOR
