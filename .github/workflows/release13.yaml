@@ -1,0 +1,35 @@
+# not working on some keywords
+# https://github.com/marketplace/actions/autobashed-semantic-versioning-semver-for-release-and-snapshot
+on:
+  push:
+    branches:
+      - init
+      - main
+
+permissions:
+  pull-requests: read
+  contents: read
+
+name: release13
+jobs:
+  release13:
+    name: Release
+    permissions: write-all
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-tags: true # we need to fetch tags to determine the latest version
+          fetch-depth: 0 # fetch-tags is not enough because of a GHA bug: https://github.com/actions/checkout/issues/1471
+      
+      - id: version
+        uses: fabien-marty/github-next-semantic-version-action@v1
+        with:
+          github-token: ${{ github.token }} # Let's use the default value of the current workflow
+          repository: ${{ github.repository }} # Let's use the default value of the current workflow
+          repository-owner: ${{ github.repository_owner }} # Let's use the default value of the current workflow
+      
+      - name: Use results
+        run: |
+          echo "Latest version is ${{ steps.version.outputs.latest-version }}"
+          echo "Next version is ${{ steps.version.outputs.next-version }}"
