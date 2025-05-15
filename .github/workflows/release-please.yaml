@@ -1,0 +1,22 @@
+name: googleapi-release-please
+
+on:
+  push:
+
+jobs:
+  release:
+    name: Build And Publish
+    runs-on:
+      group: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: googleapis/release-please-action@v4
+        with:
+          release-type: simple
