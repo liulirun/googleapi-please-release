@@ -6,8 +6,7 @@ on:
 jobs:
   release:
     name: Build And Publish
-    runs-on:
-      group: ubuntu-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
@@ -20,4 +19,4 @@ jobs:
       - uses: googleapis/release-please-action@v4
         with:
           release-type: simple
-          token: ${{ secrets.GH_TOKEN}}
+          # token: ${{ secrets.GH_TOKEN}}
